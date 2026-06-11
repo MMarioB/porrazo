@@ -62,8 +62,8 @@
             background: none;
             border: none;
             color: rgba(255, 255, 255, 0.6);
-            padding: 0.75rem 1.4rem;
-            font-size: 0.85rem;
+            padding: 0.75rem 1.2rem;
+            font-size: 0.82rem;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             white-space: nowrap;
@@ -80,12 +80,28 @@
             color: white;
         }
 
+        .nav-bracket {
+            background: #f0ede8;
+            border-bottom: 1px solid var(--gris-borde);
+            text-align: center;
+            padding: 0.55rem 1rem;
+            font-size: 0.83rem;
+        }
+
+        .nav-bracket a {
+            color: var(--azul);
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 0.5rem;
+        }
+
         .container {
             max-width: 960px;
             margin: 0 auto;
             padding: 1.5rem 1rem 4rem;
         }
 
+        /* INICIO */
         #screen-inicio {
             max-width: 480px;
             margin: 2rem auto;
@@ -150,6 +166,7 @@
             cursor: not-allowed;
         }
 
+        /* GRUPOS */
         #screen-grupos {
             display: none;
         }
@@ -317,6 +334,138 @@
             cursor: not-allowed;
         }
 
+        /* EXTRAS */
+        #screen-extras {
+            display: none;
+        }
+
+        .extras-card {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 16px;
+            overflow: hidden;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .extras-header {
+            background: linear-gradient(135deg, #b8860b, #c9a02a);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .extras-header h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .extras-header p {
+            opacity: 0.85;
+            font-size: 0.85rem;
+        }
+
+        .extras-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .extra-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .extra-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--texto);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .extra-label span {
+            font-size: 1.1rem;
+        }
+
+        .extra-sublabel {
+            font-size: 0.75rem;
+            color: var(--texto-muted);
+        }
+
+        .extra-input {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 1.5px solid var(--gris-borde);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .extra-input:focus {
+            border-color: var(--oro);
+        }
+
+        .extra-pts {
+            font-size: 0.72rem;
+            background: #fff8e1;
+            color: #7a5900;
+            border-radius: 20px;
+            padding: 0.1rem 0.5rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .extras-acciones {
+            padding: 0 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn-enviar-extras {
+            background: #b8860b;
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-enviar-extras:hover {
+            background: #9a7009;
+        }
+
+        .btn-enviar-extras:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .btn-saltar {
+            background: none;
+            color: var(--texto-muted);
+            border: 1.5px solid var(--gris-borde);
+            padding: 0.7rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-saltar:hover {
+            background: var(--gris-fondo);
+        }
+
+        /* RESUMEN */
         #screen-resumen {
             display: none;
         }
@@ -436,6 +585,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
+            font-family: inherit;
         }
 
         .btn-enviar:hover {
@@ -456,7 +606,7 @@
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            font-family: inherit;
         }
 
         .btn-editar:hover {
@@ -524,27 +674,28 @@
     <nav class="steps">
         <button class="step-btn active" id="tab-inicio" onclick="irA('inicio')">1. Nombre</button>
         <button class="step-btn" id="tab-grupos" onclick="irA('grupos')">2. Grupos</button>
-        <button class="step-btn" id="tab-resumen" onclick="irA('resumen')">3. Enviar</button>
+        <button class="step-btn" id="tab-extras" onclick="irA('extras')">3. Premios</button>
+        <button class="step-btn" id="tab-resumen" onclick="irA('resumen')">4. Enviar</button>
     </nav>
-    <div
-        style="background:#f0ede8;border-bottom:1px solid #ddd9d0;text-align:center;padding:0.55rem 1rem;font-size:0.83rem;">
+    <div class="nav-bracket">
         <span style="color:#888">¿Ya enviaste la fase de grupos?</span>
-        <a href="bracket.html" style="margin-left:0.6rem;color:#1a5fa8;font-weight:600;text-decoration:none;">🏆 Ir al
-            bracket de eliminatorias →</a>
+        <a href="bracket.html">🏆 Ir al bracket de eliminatorias →</a>
     </div>
 
     <div class="container">
 
+        <!-- 1. NOMBRE -->
         <div id="screen-inicio">
             <div class="trophy">🏆</div>
             <h2>¡Bienvenido a la porra!</h2>
-            <p>Predice quién queda 1°, 2°, 3° y 4° en cada uno de los 12 grupos del Mundial 2026. Tu quiniela se guarda
-                automáticamente.</p>
+            <p>Predice quién queda 1°, 2°, 3° y 4° en cada uno de los 12 grupos del Mundial 2026, y elige a los mejores
+                jugadores del torneo.</p>
             <input class="input-nombre" type="text" id="input-nombre" placeholder="Tu nombre..." maxlength="30"
                 oninput="validarNombre()">
             <button class="btn-primary" id="btn-empezar" onclick="empezar()" disabled>Empezar →</button>
         </div>
 
+        <!-- 2. GRUPOS -->
         <div id="screen-grupos">
             <div class="grupos-header">
                 <h2>Ordena cada grupo</h2>
@@ -558,28 +709,81 @@
                 <span id="texto-progreso">0 / 12 grupos</span>
             </div>
             <div class="grupos-grid" id="grupos-grid"></div>
-            <button class="btn-siguiente" id="btn-ver-resumen" onclick="verResumen()" disabled>Ver resumen →</button>
+            <button class="btn-siguiente" id="btn-ver-extras" onclick="irA('extras')" disabled>Siguiente: premios
+                →</button>
         </div>
 
+        <!-- 3. PREMIOS INDIVIDUALES -->
+        <div id="screen-extras">
+            <div class="extras-card">
+                <div class="extras-header">
+                    <h2>🌟 Premios individuales</h2>
+                    <p>Opcional pero vale puntos — escribe el nombre del jugador que crees que ganará cada premio</p>
+                </div>
+                <div class="extras-body">
+                    <div class="extra-field">
+                        <div class="extra-label"><span>🏅</span> Balón de Oro <span class="extra-pts">5 pts</span></div>
+                        <div class="extra-sublabel">Mejor jugador del torneo</div>
+                        <input class="extra-input" type="text" id="extra-balon" placeholder="Nombre del jugador..."
+                            maxlength="50">
+                    </div>
+                    <div class="extra-field">
+                        <div class="extra-label"><span>⚽</span> Bota de Oro <span class="extra-pts">5 pts</span></div>
+                        <div class="extra-sublabel">Máximo goleador</div>
+                        <input class="extra-input" type="text" id="extra-bota" placeholder="Nombre del jugador..."
+                            maxlength="50">
+                    </div>
+                    <div class="extra-field">
+                        <div class="extra-label"><span>🎯</span> Mejor asistente <span class="extra-pts">5 pts</span>
+                        </div>
+                        <div class="extra-sublabel">Más asistencias de gol</div>
+                        <input class="extra-input" type="text" id="extra-asistente" placeholder="Nombre del jugador..."
+                            maxlength="50">
+                    </div>
+                    <div class="extra-field">
+                        <div class="extra-label"><span>🧤</span> Guante de Oro <span class="extra-pts">5 pts</span>
+                        </div>
+                        <div class="extra-sublabel">Mejor portero</div>
+                        <input class="extra-input" type="text" id="extra-portero" placeholder="Nombre del jugador..."
+                            maxlength="50">
+                    </div>
+                    <div class="extra-field">
+                        <div class="extra-label"><span>🌠</span> Revelación del torneo <span class="extra-pts">5
+                                pts</span></div>
+                        <div class="extra-sublabel">Jugador sorpresa</div>
+                        <input class="extra-input" type="text" id="extra-revelacion" placeholder="Nombre del jugador..."
+                            maxlength="50">
+                    </div>
+                </div>
+                <div class="extras-acciones">
+                    <button class="btn-enviar-extras" onclick="irA('resumen')">Ver resumen →</button>
+                    <button class="btn-saltar" onclick="irA('resumen')">Saltar premios (no puntúan)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. RESUMEN + ENVÍO -->
         <div id="screen-resumen">
             <div class="aviso-cierre">
                 ⏰ El Mundial empieza el <strong>15 de junio de 2026</strong>. Envía tu quiniela antes de que arranque.
             </div>
             <div class="resumen-card">
                 <div class="resumen-header">
-                    <h2>Tu quiniela</h2>
-                    <p>Mundial 2026 · Fase de grupos</p>
+                    <h2>Tu quiniela completa</h2>
+                    <p>Mundial 2026 · Fase de grupos + premios</p>
                     <div class="nombre-participante" id="resumen-nombre"></div>
                 </div>
                 <div class="resumen-grupos" id="resumen-grupos"></div>
                 <div class="resumen-acciones">
-                    <button class="btn-enviar" id="btn-enviar" onclick="enviarQuiniela()">📤 Enviar quiniela al
+                    <button class="btn-enviar" id="btn-enviar" onclick="enviarTodo()">📤 Enviar quiniela al
                         grupo</button>
                     <div class="estado-envio" id="estado-envio"></div>
                     <a href="bracket.html" id="btn-bracket"
                         style="display:none;text-align:center;background:#1a5fa8;color:white;padding:0.85rem;border-radius:8px;font-weight:600;text-decoration:none;font-size:0.95rem;">🏆
                         Ir al bracket de eliminatorias →</a>
-                    <button class="btn-editar" onclick="irA('grupos')">✏️ Editar predicciones</button>
+                    <button class="btn-editar" onclick="irA('grupos')">✏️ Editar grupos</button>
+                    <button class="btn-editar" onclick="irA('extras')" style="border-color:#b8860b;color:#b8860b;">🌟
+                        Editar premios</button>
                 </div>
             </div>
         </div>
@@ -604,11 +808,12 @@
             { nombre: "Grupo L", equipos: ["Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Croacia 🇭🇷", "Ghana 🇬🇭", "Panamá 🇵🇦"] }
         ];
 
+        const SCREENS = ['inicio', 'grupos', 'extras', 'resumen'];
         let nombre = '';
         let predicciones = {};
 
         function irA(pantalla) {
-            ['inicio', 'grupos', 'resumen'].forEach(p => {
+            SCREENS.forEach(p => {
                 document.getElementById('screen-' + p).style.display = 'none';
                 document.getElementById('tab-' + p).classList.remove('active');
             });
@@ -619,8 +824,7 @@
         }
 
         function validarNombre() {
-            const val = document.getElementById('input-nombre').value.trim();
-            document.getElementById('btn-empezar').disabled = val.length < 2;
+            document.getElementById('btn-empezar').disabled = document.getElementById('input-nombre').value.trim().length < 2;
         }
 
         function empezar() {
@@ -687,19 +891,27 @@
             const n = GRUPOS.filter(g => grupoCompleto(g.nombre)).length;
             document.getElementById('barra-progreso').style.width = Math.round(n / 12 * 100) + '%';
             document.getElementById('texto-progreso').textContent = n + ' / 12 grupos';
-            document.getElementById('btn-ver-resumen').disabled = n < 12;
+            document.getElementById('btn-ver-extras').disabled = n < 12;
         }
 
-        function verResumen() { irA('resumen'); }
+        function getExtras() {
+            return {
+                balon: document.getElementById('extra-balon').value.trim(),
+                bota: document.getElementById('extra-bota').value.trim(),
+                asistente: document.getElementById('extra-asistente').value.trim(),
+                portero: document.getElementById('extra-portero').value.trim(),
+                revelacion: document.getElementById('extra-revelacion').value.trim()
+            };
+        }
 
         function renderResumen() {
             document.getElementById('resumen-nombre').textContent = nombre;
             const est = document.getElementById('estado-envio');
-            est.className = 'estado-envio';
-            est.textContent = '';
+            est.className = 'estado-envio'; est.textContent = '';
             const btn = document.getElementById('btn-enviar');
-            btn.disabled = false;
-            btn.textContent = '📤 Enviar quiniela al grupo';
+            btn.disabled = false; btn.textContent = '📤 Enviar quiniela al grupo';
+            document.getElementById('btn-bracket').style.display = 'none';
+
             const wrap = document.getElementById('resumen-grupos');
             wrap.innerHTML = '';
             GRUPOS.forEach(g => {
@@ -708,34 +920,65 @@
                 div.className = 'resumen-grupo';
                 let html = `<div class="resumen-grupo-titulo">${g.nombre}</div>`;
                 [1, 2, 3, 4].forEach(pos => {
-                    const eq = pred[pos] || '—';
-                    html += `<div class="resumen-pos"><div class="pos-num pos-${pos}">${pos}</div><span>${eq}</span></div>`;
+                    html += `<div class="resumen-pos"><div class="pos-num pos-${pos}">${pos}</div><span>${pred[pos] || '—'}</span></div>`;
                 });
                 div.innerHTML = html;
                 wrap.appendChild(div);
             });
+
+            // Mostrar extras si hay alguno
+            const extras = getExtras();
+            const hayExtras = Object.values(extras).some(v => v);
+            if (hayExtras) {
+                const extDiv = document.createElement('div');
+                extDiv.style.cssText = 'grid-column:1/-1;padding:0.9rem 1.2rem;border-top:2px solid #f0ede8;background:#fffdf5;';
+                const items = [
+                    { label: '🏅 Balón de Oro', val: extras.balon },
+                    { label: '⚽ Bota de Oro', val: extras.bota },
+                    { label: '🎯 Mejor asistente', val: extras.asistente },
+                    { label: '🧤 Guante de Oro', val: extras.portero },
+                    { label: '🌠 Revelación', val: extras.revelacion },
+                ].filter(x => x.val);
+                extDiv.innerHTML = `<div style="font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.5px;color:#b8860b;margin-bottom:0.5rem;">Premios individuales</div>`
+                    + items.map(x => `<div style="font-size:0.85rem;margin-bottom:0.2rem;">${x.label}: <strong>${x.val}</strong></div>`).join('');
+                wrap.appendChild(extDiv);
+            }
         }
 
-        async function enviarQuiniela() {
+        async function enviarTodo() {
             const est = document.getElementById('estado-envio');
             const btn = document.getElementById('btn-enviar');
             btn.disabled = true;
             est.className = 'estado-envio enviando';
             est.textContent = '⏳ Enviando tu quiniela...';
+
+            const extras = getExtras();
+
             try {
+                // Envío 1: quiniela de grupos
                 await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
+                    method: 'POST', mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify({ nombre, predicciones })
                 });
+
+                // Envío 2: premios (solo si hay alguno relleno)
+                const hayExtras = Object.values(extras).some(v => v);
+                if (hayExtras) {
+                    await fetch(APPS_SCRIPT_URL, {
+                        method: 'POST', mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain' },
+                        body: JSON.stringify({ tipo: 'extras', nombre, extras })
+                    });
+                }
+
                 est.className = 'estado-envio ok';
                 est.textContent = '✅ ¡Quiniela enviada! Ya aparece en el Sheet del grupo.';
                 btn.textContent = '✅ Quiniela enviada';
                 document.getElementById('btn-bracket').style.display = 'block';
             } catch (err) {
                 est.className = 'estado-envio error';
-                est.textContent = '❌ Error de red. Comprueba tu conexión e inténtalo de nuevo.';
+                est.textContent = '❌ Error de red. Inténtalo de nuevo.';
                 btn.disabled = false;
             }
         }
@@ -745,5 +988,5 @@
         });
     </script>
 </body>
- 
+
 </html>
