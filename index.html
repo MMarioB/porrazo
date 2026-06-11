@@ -1,739 +1,319 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Porra Mundial 2026</title>
-    <style>
-        :root {
-            --verde: #1a6b3c;
-            --verde-mid: #145530;
-            --verde-claro: #e8f5ee;
-            --oro: #c9a02a;
-            --gris-fondo: #f5f4f0;
-            --gris-borde: #ddd9d0;
-            --texto: #1a1a1a;
-            --texto-muted: #666;
-            --azul: #1a5fa8;
-            --rojo: #c0392b;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--gris-fondo);
-            color: var(--texto);
-            min-height: 100vh;
-        }
-
-        header {
-            background: var(--verde);
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem 1.5rem;
-        }
-
-        header h1 {
-            font-size: clamp(1.6rem, 4vw, 2.4rem);
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 0.4rem;
-        }
-
-        header p {
-            opacity: 0.8;
-            font-size: 0.95rem;
-        }
-
-        .steps {
-            display: flex;
-            justify-content: center;
-            background: var(--verde-mid);
-            overflow-x: auto;
-        }
-
-        .step-btn {
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            padding: 0.75rem 1.4rem;
-            font-size: 0.85rem;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .step-btn.active {
-            color: white;
-            border-bottom-color: var(--oro);
-            font-weight: 600;
-        }
-
-        .step-btn:hover {
-            color: white;
-        }
-
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 1.5rem 1rem 4rem;
-        }
-
-        #screen-inicio {
-            max-width: 480px;
-            margin: 2rem auto;
-            background: white;
-            border-radius: 16px;
-            border: 1px solid var(--gris-borde);
-            padding: 2.5rem 2rem;
-            text-align: center;
-        }
-
-        #screen-inicio .trophy {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-        }
-
-        #screen-inicio h2 {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-        }
-
-        #screen-inicio p {
-            color: var(--texto-muted);
-            font-size: 0.88rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-
-        .input-nombre {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1.5px solid var(--gris-borde);
-            border-radius: 8px;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .input-nombre:focus {
-            border-color: var(--verde);
-        }
-
-        .btn-primary {
-            width: 100%;
-            background: var(--verde);
-            color: white;
-            border: none;
-            padding: 0.85rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-primary:hover {
-            background: var(--verde-mid);
-        }
-
-        .btn-primary:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-        }
-
-        #screen-grupos {
-            display: none;
-        }
-
-        .grupos-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .grupos-header h2 {
-            font-size: 1.3rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .grupos-header p {
-            color: var(--texto-muted);
-            font-size: 0.88rem;
-        }
-
-        .progreso-grupos {
-            background: white;
-            border: 1px solid var(--gris-borde);
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 0.88rem;
-            color: var(--texto-muted);
-        }
-
-        .progreso-bar-wrap {
-            flex: 1;
-            height: 6px;
-            background: #eee;
-            border-radius: 3px;
-        }
-
-        .progreso-bar {
-            height: 100%;
-            background: var(--verde);
-            border-radius: 3px;
-            transition: width 0.3s;
-        }
-
-        .grupos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
-        }
-
-        .grupo-card {
-            background: white;
-            border: 1.5px solid var(--gris-borde);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: border-color 0.2s;
-        }
-
-        .grupo-card.completo {
-            border-color: var(--verde);
-        }
-
-        .grupo-card-header {
-            background: var(--verde);
-            color: white;
-            padding: 0.6rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .grupo-card-header span {
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-
-        .check-grupo {
-            font-size: 0.8rem;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .grupo-card.completo .check-grupo {
-            opacity: 1;
-        }
-
-        .grupo-equipos {
-            padding: 0.5rem 0.75rem 0.75rem;
-        }
-
-        .equipo-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.35rem 0;
-            border-bottom: 1px solid #f0ede8;
-            font-size: 0.88rem;
-        }
-
-        .equipo-row:last-child {
-            border-bottom: none;
-        }
-
-        .pos-badge {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--gris-fondo);
-            border: 1px solid var(--gris-borde);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: var(--texto-muted);
-            flex-shrink: 0;
-        }
-
-        .grupo-select {
-            width: 100%;
-            padding: 0.3rem 0.5rem;
-            border: 1px solid var(--gris-borde);
-            border-radius: 6px;
-            font-size: 0.82rem;
-            background: white;
-            color: var(--texto);
-            outline: none;
-            cursor: pointer;
-        }
-
-        .grupo-select:focus {
-            border-color: var(--verde);
-        }
-
-        .grupo-select.seleccionado {
-            background: var(--verde-claro);
-            border-color: var(--verde);
-            font-weight: 600;
-        }
-
-        .btn-siguiente {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 2rem auto 0;
-            background: var(--verde);
-            color: white;
-            border: none;
-            padding: 0.9rem;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-siguiente:hover {
-            background: var(--verde-mid);
-        }
-
-        .btn-siguiente:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-        }
-
-        #screen-resumen {
-            display: none;
-        }
-
-        .resumen-card {
-            background: white;
-            border: 1px solid var(--gris-borde);
-            border-radius: 16px;
-            overflow: hidden;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .resumen-header {
-            background: var(--verde);
-            color: white;
-            padding: 1.5rem 1.5rem 1rem;
-            text-align: center;
-        }
-
-        .resumen-header h2 {
-            font-size: 1.4rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .resumen-header p {
-            opacity: 0.8;
-            font-size: 0.88rem;
-        }
-
-        .nombre-participante {
-            background: rgba(255, 255, 255, 0.15);
-            display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-        }
-
-        .resumen-grupos {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        }
-
-        .resumen-grupo {
-            padding: 0.9rem 1.2rem;
-            border-right: 1px solid var(--gris-borde);
-            border-bottom: 1px solid var(--gris-borde);
-        }
-
-        .resumen-grupo-titulo {
-            font-weight: 700;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--verde);
-            margin-bottom: 0.4rem;
-        }
-
-        .resumen-pos {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.85rem;
-            margin-bottom: 0.2rem;
-        }
-
-        .pos-num {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.68rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .pos-1 {
-            background: #FFD700;
-            color: #7a5900;
-        }
-
-        .pos-2 {
-            background: #C0C0C0;
-            color: #444;
-        }
-
-        .pos-3 {
-            background: #CD7F32;
-            color: white;
-        }
-
-        .pos-4 {
-            background: var(--gris-fondo);
-            color: var(--texto-muted);
-            border: 1px solid var(--gris-borde);
-        }
-
-        .resumen-acciones {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            border-top: 1px solid var(--gris-borde);
-        }
-
-        .btn-enviar {
-            background: var(--azul);
-            color: white;
-            border: none;
-            padding: 0.9rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-enviar:hover {
-            background: #144d8a;
-        }
-
-        .btn-enviar:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-        }
-
-        .btn-editar {
-            background: none;
-            color: var(--verde);
-            border: 1.5px solid var(--verde);
-            padding: 0.75rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-editar:hover {
-            background: var(--verde-claro);
-        }
-
-        .estado-envio {
-            border-radius: 8px;
-            padding: 0.85rem 1rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-align: center;
-            display: none;
-        }
-
-        .estado-envio.enviando {
-            display: block;
-            background: #e8f0fe;
-            color: var(--azul);
-        }
-
-        .estado-envio.ok {
-            display: block;
-            background: var(--verde-claro);
-            color: var(--verde-mid);
-        }
-
-        .estado-envio.error {
-            display: block;
-            background: #fdecea;
-            color: var(--rojo);
-        }
-
-        .aviso-cierre {
-            background: #fff8e1;
-            border: 1px solid #f0c040;
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            font-size: 0.83rem;
-            color: #5a4000;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        @media (max-width: 500px) {
-            header h1 {
-                font-size: 1.4rem;
-            }
-
-            .grupos-grid,
-            .resumen-grupos {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Porra Mundial 2026</title>
+<style>
+  :root {
+    --verde: #1a6b3c;
+    --verde-mid: #145530;
+    --verde-claro: #e8f5ee;
+    --oro: #c9a02a;
+    --gris-fondo: #f5f4f0;
+    --gris-borde: #ddd9d0;
+    --texto: #1a1a1a;
+    --texto-muted: #666;
+    --azul: #1a5fa8;
+    --rojo: #c0392b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gris-fondo); color: var(--texto); min-height: 100vh; }
+
+  header { background: var(--verde); color: white; text-align: center; padding: 2rem 1rem 1.5rem; }
+  header h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.5px; margin-bottom: 0.4rem; }
+  header p { opacity: 0.8; font-size: 0.95rem; }
+
+  .steps { display: flex; justify-content: center; background: var(--verde-mid); overflow-x: auto; }
+  .step-btn { background: none; border: none; color: rgba(255,255,255,0.6); padding: 0.75rem 1.4rem; font-size: 0.85rem; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; }
+  .step-btn.active { color: white; border-bottom-color: var(--oro); font-weight: 600; }
+  .step-btn:hover { color: white; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  #screen-inicio { max-width: 480px; margin: 2rem auto; background: white; border-radius: 16px; border: 1px solid var(--gris-borde); padding: 2.5rem 2rem; text-align: center; }
+  #screen-inicio .trophy { font-size: 3.5rem; margin-bottom: 1rem; }
+  #screen-inicio h2 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+  #screen-inicio p { color: var(--texto-muted); font-size: 0.88rem; margin-bottom: 1.5rem; line-height: 1.5; }
+  .input-nombre { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--gris-borde); border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; }
+  .input-nombre:focus { border-color: var(--verde); }
+  .btn-primary { width: 100%; background: var(--verde); color: white; border: none; padding: 0.85rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn-primary:hover { background: var(--verde-mid); }
+  .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+
+  #screen-grupos { display: none; }
+  .grupos-header { text-align: center; margin-bottom: 1.5rem; }
+  .grupos-header h2 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+  .grupos-header p { color: var(--texto-muted); font-size: 0.88rem; }
+  .progreso-grupos { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.88rem; color: var(--texto-muted); }
+  .progreso-bar-wrap { flex: 1; height: 6px; background: #eee; border-radius: 3px; }
+  .progreso-bar { height: 100%; background: var(--verde); border-radius: 3px; transition: width 0.3s; }
+  .grupos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .grupo-card { background: white; border: 1.5px solid var(--gris-borde); border-radius: 12px; overflow: hidden; transition: border-color 0.2s; }
+  .grupo-card.completo { border-color: var(--verde); }
+  .grupo-card-header { background: var(--verde); color: white; padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+  .grupo-card-header span { font-weight: 700; font-size: 0.95rem; }
+  .check-grupo { font-size: 0.8rem; opacity: 0; transition: opacity 0.2s; }
+  .grupo-card.completo .check-grupo { opacity: 1; }
+  .grupo-equipos { padding: 0.5rem 0.75rem 0.75rem; }
+  .equipo-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem 0; border-bottom: 1px solid #f0ede8; font-size: 0.88rem; }
+  .equipo-row:last-child { border-bottom: none; }
+  .pos-badge { width: 22px; height: 22px; border-radius: 50%; background: var(--gris-fondo); border: 1px solid var(--gris-borde); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: var(--texto-muted); flex-shrink: 0; }
+  .grupo-select { width: 100%; padding: 0.3rem 0.5rem; border: 1px solid var(--gris-borde); border-radius: 6px; font-size: 0.82rem; background: white; color: var(--texto); outline: none; cursor: pointer; }
+  .grupo-select:focus { border-color: var(--verde); }
+  .grupo-select.seleccionado { background: var(--verde-claro); border-color: var(--verde); font-weight: 600; }
+  .btn-siguiente { display: block; width: 100%; max-width: 300px; margin: 2rem auto 0; background: var(--verde); color: white; border: none; padding: 0.9rem; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn-siguiente:hover { background: var(--verde-mid); }
+  .btn-siguiente:disabled { background: #aaa; cursor: not-allowed; }
+
+  #screen-resumen { display: none; }
+  .resumen-card { background: white; border: 1px solid var(--gris-borde); border-radius: 16px; overflow: hidden; max-width: 700px; margin: 0 auto; }
+  .resumen-header { background: var(--verde); color: white; padding: 1.5rem 1.5rem 1rem; text-align: center; }
+  .resumen-header h2 { font-size: 1.4rem; margin-bottom: 0.2rem; }
+  .resumen-header p { opacity: 0.8; font-size: 0.88rem; }
+  .nombre-participante { background: rgba(255,255,255,0.15); display: inline-block; padding: 0.3rem 1rem; border-radius: 20px; font-weight: 700; font-size: 1.1rem; margin-top: 0.5rem; }
+  .resumen-grupos { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .resumen-grupo { padding: 0.9rem 1.2rem; border-right: 1px solid var(--gris-borde); border-bottom: 1px solid var(--gris-borde); }
+  .resumen-grupo-titulo { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--verde); margin-bottom: 0.4rem; }
+  .resumen-pos { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; margin-bottom: 0.2rem; }
+  .pos-num { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; flex-shrink: 0; }
+  .pos-1 { background: #FFD700; color: #7a5900; }
+  .pos-2 { background: #C0C0C0; color: #444; }
+  .pos-3 { background: #CD7F32; color: white; }
+  .pos-4 { background: var(--gris-fondo); color: var(--texto-muted); border: 1px solid var(--gris-borde); }
+  .resumen-acciones { padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; border-top: 1px solid var(--gris-borde); }
+  .btn-enviar { background: var(--azul); color: white; border: none; padding: 0.9rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .btn-enviar:hover { background: #144d8a; }
+  .btn-enviar:disabled { background: #aaa; cursor: not-allowed; }
+  .btn-editar { background: none; color: var(--verde); border: 1.5px solid var(--verde); padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .btn-editar:hover { background: var(--verde-claro); }
+  .estado-envio { border-radius: 8px; padding: 0.85rem 1rem; font-size: 0.9rem; font-weight: 500; text-align: center; display: none; }
+  .estado-envio.enviando { display: block; background: #e8f0fe; color: var(--azul); }
+  .estado-envio.ok { display: block; background: var(--verde-claro); color: var(--verde-mid); }
+  .estado-envio.error { display: block; background: #fdecea; color: var(--rojo); }
+  .aviso-cierre { background: #fff8e1; border: 1px solid #f0c040; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.83rem; color: #5a4000; text-align: center; margin-bottom: 1.5rem; }
+
+  @media (max-width: 500px) {
+    header h1 { font-size: 1.4rem; }
+    .grupos-grid, .resumen-grupos { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
-
 <body>
 
-    <header>
-        <h1>⚽ Porra Mundial 2026</h1>
-        <p>Predice el orden final de cada grupo</p>
-    </header>
+<header>
+  <h1>⚽ Porra Mundial 2026</h1>
+  <p>Predice el orden final de cada grupo</p>
+</header>
 
-    <nav class="steps">
-        <button class="step-btn active" id="tab-inicio" onclick="irA('inicio')">1. Nombre</button>
-        <button class="step-btn" id="tab-grupos" onclick="irA('grupos')">2. Grupos</button>
-        <button class="step-btn" id="tab-resumen" onclick="irA('resumen')">3. Enviar</button>
-    </nav>
+<nav class="steps">
+  <button class="step-btn active" id="tab-inicio" onclick="irA('inicio')">1. Nombre</button>
+  <button class="step-btn" id="tab-grupos" onclick="irA('grupos')">2. Grupos</button>
+  <button class="step-btn" id="tab-resumen" onclick="irA('resumen')">3. Enviar</button>
+</nav>
 
-    <div class="container">
+<div class="container">
 
-        <div id="screen-inicio">
-            <div class="trophy">🏆</div>
-            <h2>¡Bienvenido a la porra!</h2>
-            <p>Predice quién queda 1°, 2°, 3° y 4° en cada uno de los 12 grupos del Mundial 2026. Tu quiniela se guarda
-                automáticamente.</p>
-            <input class="input-nombre" type="text" id="input-nombre" placeholder="Tu nombre..." maxlength="30"
-                oninput="validarNombre()">
-            <button class="btn-primary" id="btn-empezar" onclick="empezar()" disabled>Empezar →</button>
-        </div>
+  <div id="screen-inicio">
+    <div class="trophy">🏆</div>
+    <h2>¡Bienvenido a la porra!</h2>
+    <p>Predice quién queda 1°, 2°, 3° y 4° en cada uno de los 12 grupos del Mundial 2026. Tu quiniela se guarda automáticamente.</p>
+    <input class="input-nombre" type="text" id="input-nombre" placeholder="Tu nombre..." maxlength="30" oninput="validarNombre()">
+    <button class="btn-primary" id="btn-empezar" onclick="empezar()" disabled>Empezar →</button>
+  </div>
 
-        <div id="screen-grupos">
-            <div class="grupos-header">
-                <h2>Ordena cada grupo</h2>
-                <p>Selecciona el equipo que quedará en cada posición</p>
-            </div>
-            <div class="progreso-grupos">
-                <span>Progreso:</span>
-                <div class="progreso-bar-wrap">
-                    <div class="progreso-bar" id="barra-progreso" style="width:0%"></div>
-                </div>
-                <span id="texto-progreso">0 / 12 grupos</span>
-            </div>
-            <div class="grupos-grid" id="grupos-grid"></div>
-            <button class="btn-siguiente" id="btn-ver-resumen" onclick="verResumen()" disabled>Ver resumen →</button>
-        </div>
-
-        <div id="screen-resumen">
-            <div class="aviso-cierre">
-                ⏰ El Mundial empieza el <strong>15 de junio de 2026</strong>. Envía tu quiniela antes de que arranque.
-            </div>
-            <div class="resumen-card">
-                <div class="resumen-header">
-                    <h2>Tu quiniela</h2>
-                    <p>Mundial 2026 · Fase de grupos</p>
-                    <div class="nombre-participante" id="resumen-nombre"></div>
-                </div>
-                <div class="resumen-grupos" id="resumen-grupos"></div>
-                <div class="resumen-acciones">
-                    <button class="btn-enviar" id="btn-enviar" onclick="enviarQuiniela()">📤 Enviar quiniela al
-                        grupo</button>
-                    <div class="estado-envio" id="estado-envio"></div>
-                    <button class="btn-editar" onclick="irA('grupos')">✏️ Editar predicciones</button>
-                </div>
-            </div>
-        </div>
-
+  <div id="screen-grupos">
+    <div class="grupos-header">
+      <h2>Ordena cada grupo</h2>
+      <p>Selecciona el equipo que quedará en cada posición</p>
     </div>
+    <div class="progreso-grupos">
+      <span>Progreso:</span>
+      <div class="progreso-bar-wrap"><div class="progreso-bar" id="barra-progreso" style="width:0%"></div></div>
+      <span id="texto-progreso">0 / 12 grupos</span>
+    </div>
+    <div class="grupos-grid" id="grupos-grid"></div>
+    <button class="btn-siguiente" id="btn-ver-resumen" onclick="verResumen()" disabled>Ver resumen →</button>
+  </div>
 
-    <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9ZqJa7-NgJBet9jr6ImyHZoBMxOnPxA4i6jvKQ-LCacts7wN7THjzKfRAhM9BAzJW/exec';
+  <div id="screen-resumen">
+    <div class="aviso-cierre">
+      ⏰ El Mundial empieza el <strong>15 de junio de 2026</strong>. Envía tu quiniela antes de que arranque.
+    </div>
+    <div class="resumen-card">
+      <div class="resumen-header">
+        <h2>Tu quiniela</h2>
+        <p>Mundial 2026 · Fase de grupos</p>
+        <div class="nombre-participante" id="resumen-nombre"></div>
+      </div>
+      <div class="resumen-grupos" id="resumen-grupos"></div>
+      <div class="resumen-acciones">
+        <button class="btn-enviar" id="btn-enviar" onclick="enviarQuiniela()">📤 Enviar quiniela al grupo</button>
+        <div class="estado-envio" id="estado-envio"></div>
+        <button class="btn-editar" onclick="irA('grupos')">✏️ Editar predicciones</button>
+        <a href="bracket.html" style="display:block;text-align:center;background:#1a5fa8;color:white;padding:0.85rem;border-radius:8px;font-weight:600;text-decoration:none;font-size:0.95rem;margin-top:0.25rem;">🏆 Ir al bracket de eliminatorias →</a>
+      </div>
+    </div>
+  </div>
 
-        const GRUPOS = [
-            { nombre: "Grupo A", equipos: ["México 🇲🇽", "Sudáfrica 🇿🇦", "Corea del Sur 🇰🇷", "Chequia 🇨🇿"] },
-            { nombre: "Grupo B", equipos: ["Canadá 🇨🇦", "Suiza 🇨🇭", "Qatar 🇶🇦", "Bosnia y Herzegovina 🇧🇦"] },
-            { nombre: "Grupo C", equipos: ["Brasil 🇧🇷", "Marruecos 🇲🇦", "Escocia 🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Haití 🇭🇹"] },
-            { nombre: "Grupo D", equipos: ["Estados Unidos 🇺🇸", "Paraguay 🇵🇾", "Australia 🇦🇺", "Turquía 🇹🇷"] },
-            { nombre: "Grupo E", equipos: ["Alemania 🇩🇪", "Ecuador 🇪🇨", "Costa de Marfil 🇨🇮", "Curazao 🇨🇼"] },
-            { nombre: "Grupo F", equipos: ["Países Bajos 🇳🇱", "Japón 🇯🇵", "Túnez 🇹🇳", "Suecia 🇸🇪"] },
-            { nombre: "Grupo G", equipos: ["Bélgica 🇧🇪", "Egipto 🇪🇬", "Irán 🇮🇷", "Nueva Zelanda 🇳🇿"] },
-            { nombre: "Grupo H", equipos: ["España 🇪🇸", "Uruguay 🇺🇾", "Arabia Saudí 🇸🇦", "Cabo Verde 🇨🇻"] },
-            { nombre: "Grupo I", equipos: ["Francia 🇫🇷", "Noruega 🇳🇴", "Senegal 🇸🇳", "Irak 🇮🇶"] },
-            { nombre: "Grupo J", equipos: ["Argentina 🇦🇷", "Austria 🇦🇹", "Argelia 🇩🇿", "Jordania 🇯🇴"] },
-            { nombre: "Grupo K", equipos: ["Portugal 🇵🇹", "Colombia 🇨🇴", "Uzbekistán 🇺🇿", "R.D. Congo 🇨🇩"] },
-            { nombre: "Grupo L", equipos: ["Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Croacia 🇭🇷", "Ghana 🇬🇭", "Panamá 🇵🇦"] }
-        ];
+</div>
 
-        let nombre = '';
-        let predicciones = {};
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9ZqJa7-NgJBet9jr6ImyHZoBMxOnPxA4i6jvKQ-LCacts7wN7THjzKfRAhM9BAzJW/exec';
 
-        function irA(pantalla) {
-            ['inicio', 'grupos', 'resumen'].forEach(p => {
-                document.getElementById('screen-' + p).style.display = 'none';
-                document.getElementById('tab-' + p).classList.remove('active');
-            });
-            document.getElementById('screen-' + pantalla).style.display = 'block';
-            document.getElementById('tab-' + pantalla).classList.add('active');
-            if (pantalla === 'grupos' && !document.getElementById('grupos-grid').innerHTML) renderGrupos();
-            if (pantalla === 'resumen') renderResumen();
-        }
+const GRUPOS = [
+  { nombre: "Grupo A", equipos: ["México 🇲🇽", "Sudáfrica 🇿🇦", "Corea del Sur 🇰🇷", "Chequia 🇨🇿"] },
+  { nombre: "Grupo B", equipos: ["Canadá 🇨🇦", "Suiza 🇨🇭", "Qatar 🇶🇦", "Bosnia y Herzegovina 🇧🇦"] },
+  { nombre: "Grupo C", equipos: ["Brasil 🇧🇷", "Marruecos 🇲🇦", "Escocia 🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Haití 🇭🇹"] },
+  { nombre: "Grupo D", equipos: ["Estados Unidos 🇺🇸", "Paraguay 🇵🇾", "Australia 🇦🇺", "Turquía 🇹🇷"] },
+  { nombre: "Grupo E", equipos: ["Alemania 🇩🇪", "Ecuador 🇪🇨", "Costa de Marfil 🇨🇮", "Curazao 🇨🇼"] },
+  { nombre: "Grupo F", equipos: ["Países Bajos 🇳🇱", "Japón 🇯🇵", "Túnez 🇹🇳", "Suecia 🇸🇪"] },
+  { nombre: "Grupo G", equipos: ["Bélgica 🇧🇪", "Egipto 🇪🇬", "Irán 🇮🇷", "Nueva Zelanda 🇳🇿"] },
+  { nombre: "Grupo H", equipos: ["España 🇪🇸", "Uruguay 🇺🇾", "Arabia Saudí 🇸🇦", "Cabo Verde 🇨🇻"] },
+  { nombre: "Grupo I", equipos: ["Francia 🇫🇷", "Noruega 🇳🇴", "Senegal 🇸🇳", "Irak 🇮🇶"] },
+  { nombre: "Grupo J", equipos: ["Argentina 🇦🇷", "Austria 🇦🇹", "Argelia 🇩🇿", "Jordania 🇯🇴"] },
+  { nombre: "Grupo K", equipos: ["Portugal 🇵🇹", "Colombia 🇨🇴", "Uzbekistán 🇺🇿", "R.D. Congo 🇨🇩"] },
+  { nombre: "Grupo L", equipos: ["Inglaterra 🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Croacia 🇭🇷", "Ghana 🇬🇭", "Panamá 🇵🇦"] }
+];
 
-        function validarNombre() {
-            const val = document.getElementById('input-nombre').value.trim();
-            document.getElementById('btn-empezar').disabled = val.length < 2;
-        }
+let nombre = '';
+let predicciones = {};
 
-        function empezar() {
-            nombre = document.getElementById('input-nombre').value.trim();
-            irA('grupos');
-            renderGrupos();
-        }
+function irA(pantalla) {
+  ['inicio','grupos','resumen'].forEach(p => {
+    document.getElementById('screen-' + p).style.display = 'none';
+    document.getElementById('tab-' + p).classList.remove('active');
+  });
+  document.getElementById('screen-' + pantalla).style.display = 'block';
+  document.getElementById('tab-' + pantalla).classList.add('active');
+  if (pantalla === 'grupos' && !document.getElementById('grupos-grid').innerHTML) renderGrupos();
+  if (pantalla === 'resumen') renderResumen();
+}
 
-        function renderGrupos() {
-            const grid = document.getElementById('grupos-grid');
-            grid.innerHTML = '';
-            GRUPOS.forEach(g => {
-                const pred = predicciones[g.nombre] || {};
-                const card = document.createElement('div');
-                card.className = 'grupo-card' + (grupoCompleto(g.nombre) ? ' completo' : '');
-                card.id = 'card-' + g.nombre.replace(' ', '-');
-                let rowsHtml = '';
-                for (let pos = 1; pos <= 4; pos++) {
-                    const selected = pred[pos] || '';
-                    let opts = '<option value="">— elige —</option>';
-                    g.equipos.forEach(eq => {
-                        const usado = Object.entries(pred).some(([k, v]) => v === eq && parseInt(k) !== pos);
-                        if (!usado || selected === eq) opts += `<option value="${eq}" ${selected === eq ? 'selected' : ''}>${eq}</option>`;
-                    });
-                    rowsHtml += `<div class="equipo-row"><div class="pos-badge">${pos}°</div><select class="grupo-select ${selected ? 'seleccionado' : ''}" onchange="elegir('${g.nombre}', ${pos}, this.value, this)" data-grupo="${g.nombre}" data-pos="${pos}">${opts}</select></div>`;
-                }
-                card.innerHTML = `<div class="grupo-card-header"><span>${g.nombre}</span><span class="check-grupo">✓ Listo</span></div><div class="grupo-equipos">${rowsHtml}</div>`;
-                grid.appendChild(card);
-            });
-            actualizarProgreso();
-        }
+function validarNombre() {
+  const val = document.getElementById('input-nombre').value.trim();
+  document.getElementById('btn-empezar').disabled = val.length < 2;
+}
 
-        function elegir(grupo, pos, valor, sel) {
-            if (!predicciones[grupo]) predicciones[grupo] = {};
-            Object.keys(predicciones[grupo]).forEach(p => {
-                if (predicciones[grupo][p] === valor && parseInt(p) !== pos) delete predicciones[grupo][p];
-            });
-            if (valor) { predicciones[grupo][pos] = valor; sel.classList.add('seleccionado'); }
-            else { delete predicciones[grupo][pos]; sel.classList.remove('seleccionado'); }
-            const g = GRUPOS.find(x => x.nombre === grupo);
-            const pred = predicciones[grupo] || {};
-            const card = document.getElementById('card-' + grupo.replace(' ', '-'));
-            card.querySelectorAll('select').forEach(s => {
-                const p = parseInt(s.dataset.pos);
-                const cur = pred[p] || '';
-                let opts = '<option value="">— elige —</option>';
-                g.equipos.forEach(eq => {
-                    const usado = Object.entries(pred).some(([k, v]) => v === eq && parseInt(k) !== p);
-                    if (!usado || cur === eq) opts += `<option value="${eq}" ${cur === eq ? 'selected' : ''}>${eq}</option>`;
-                });
-                s.innerHTML = opts;
-                s.className = 'grupo-select' + (cur ? ' seleccionado' : '');
-            });
-            card.className = 'grupo-card' + (grupoCompleto(grupo) ? ' completo' : '');
-            actualizarProgreso();
-        }
+function empezar() {
+  nombre = document.getElementById('input-nombre').value.trim();
+  irA('grupos');
+  renderGrupos();
+}
 
-        function grupoCompleto(nombre) {
-            const p = predicciones[nombre] || {};
-            return [1, 2, 3, 4].every(i => p[i]);
-        }
+function renderGrupos() {
+  const grid = document.getElementById('grupos-grid');
+  grid.innerHTML = '';
+  GRUPOS.forEach(g => {
+    const pred = predicciones[g.nombre] || {};
+    const card = document.createElement('div');
+    card.className = 'grupo-card' + (grupoCompleto(g.nombre) ? ' completo' : '');
+    card.id = 'card-' + g.nombre.replace(' ', '-');
+    let rowsHtml = '';
+    for (let pos = 1; pos <= 4; pos++) {
+      const selected = pred[pos] || '';
+      let opts = '<option value="">— elige —</option>';
+      g.equipos.forEach(eq => {
+        const usado = Object.entries(pred).some(([k,v]) => v === eq && parseInt(k) !== pos);
+        if (!usado || selected === eq) opts += `<option value="${eq}" ${selected === eq ? 'selected' : ''}>${eq}</option>`;
+      });
+      rowsHtml += `<div class="equipo-row"><div class="pos-badge">${pos}°</div><select class="grupo-select ${selected ? 'seleccionado' : ''}" onchange="elegir('${g.nombre}', ${pos}, this.value, this)" data-grupo="${g.nombre}" data-pos="${pos}">${opts}</select></div>`;
+    }
+    card.innerHTML = `<div class="grupo-card-header"><span>${g.nombre}</span><span class="check-grupo">✓ Listo</span></div><div class="grupo-equipos">${rowsHtml}</div>`;
+    grid.appendChild(card);
+  });
+  actualizarProgreso();
+}
 
-        function actualizarProgreso() {
-            const n = GRUPOS.filter(g => grupoCompleto(g.nombre)).length;
-            document.getElementById('barra-progreso').style.width = Math.round(n / 12 * 100) + '%';
-            document.getElementById('texto-progreso').textContent = n + ' / 12 grupos';
-            document.getElementById('btn-ver-resumen').disabled = n < 12;
-        }
+function elegir(grupo, pos, valor, sel) {
+  if (!predicciones[grupo]) predicciones[grupo] = {};
+  Object.keys(predicciones[grupo]).forEach(p => {
+    if (predicciones[grupo][p] === valor && parseInt(p) !== pos) delete predicciones[grupo][p];
+  });
+  if (valor) { predicciones[grupo][pos] = valor; sel.classList.add('seleccionado'); }
+  else { delete predicciones[grupo][pos]; sel.classList.remove('seleccionado'); }
+  const g = GRUPOS.find(x => x.nombre === grupo);
+  const pred = predicciones[grupo] || {};
+  const card = document.getElementById('card-' + grupo.replace(' ', '-'));
+  card.querySelectorAll('select').forEach(s => {
+    const p = parseInt(s.dataset.pos);
+    const cur = pred[p] || '';
+    let opts = '<option value="">— elige —</option>';
+    g.equipos.forEach(eq => {
+      const usado = Object.entries(pred).some(([k,v]) => v === eq && parseInt(k) !== p);
+      if (!usado || cur === eq) opts += `<option value="${eq}" ${cur === eq ? 'selected' : ''}>${eq}</option>`;
+    });
+    s.innerHTML = opts;
+    s.className = 'grupo-select' + (cur ? ' seleccionado' : '');
+  });
+  card.className = 'grupo-card' + (grupoCompleto(grupo) ? ' completo' : '');
+  actualizarProgreso();
+}
 
-        function verResumen() { irA('resumen'); }
+function grupoCompleto(nombre) {
+  const p = predicciones[nombre] || {};
+  return [1,2,3,4].every(i => p[i]);
+}
 
-        function renderResumen() {
-            document.getElementById('resumen-nombre').textContent = nombre;
-            const est = document.getElementById('estado-envio');
-            est.className = 'estado-envio';
-            est.textContent = '';
-            const btn = document.getElementById('btn-enviar');
-            btn.disabled = false;
-            btn.textContent = '📤 Enviar quiniela al grupo';
-            const wrap = document.getElementById('resumen-grupos');
-            wrap.innerHTML = '';
-            GRUPOS.forEach(g => {
-                const pred = predicciones[g.nombre] || {};
-                const div = document.createElement('div');
-                div.className = 'resumen-grupo';
-                let html = `<div class="resumen-grupo-titulo">${g.nombre}</div>`;
-                [1, 2, 3, 4].forEach(pos => {
-                    const eq = pred[pos] || '—';
-                    html += `<div class="resumen-pos"><div class="pos-num pos-${pos}">${pos}</div><span>${eq}</span></div>`;
-                });
-                div.innerHTML = html;
-                wrap.appendChild(div);
-            });
-        }
+function actualizarProgreso() {
+  const n = GRUPOS.filter(g => grupoCompleto(g.nombre)).length;
+  document.getElementById('barra-progreso').style.width = Math.round(n/12*100) + '%';
+  document.getElementById('texto-progreso').textContent = n + ' / 12 grupos';
+  document.getElementById('btn-ver-resumen').disabled = n < 12;
+}
 
-        async function enviarQuiniela() {
-            const est = document.getElementById('estado-envio');
-            const btn = document.getElementById('btn-enviar');
-            btn.disabled = true;
-            est.className = 'estado-envio enviando';
-            est.textContent = '⏳ Enviando tu quiniela...';
-            try {
-                await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ nombre, predicciones })
-                });
-                est.className = 'estado-envio ok';
-                est.textContent = '✅ ¡Quiniela enviada! Ya aparece en el Sheet del grupo.';
-                btn.textContent = '✅ Quiniela enviada';
-            } catch (err) {
-                est.className = 'estado-envio error';
-                est.textContent = '❌ Error de red. Comprueba tu conexión e inténtalo de nuevo.';
-                btn.disabled = false;
-            }
-        }
+function verResumen() { irA('resumen'); }
 
-        document.getElementById('input-nombre').addEventListener('keydown', e => {
-            if (e.key === 'Enter') empezar();
-        });
-    </script>
+function renderResumen() {
+  document.getElementById('resumen-nombre').textContent = nombre;
+  const est = document.getElementById('estado-envio');
+  est.className = 'estado-envio';
+  est.textContent = '';
+  const btn = document.getElementById('btn-enviar');
+  btn.disabled = false;
+  btn.textContent = '📤 Enviar quiniela al grupo';
+  const wrap = document.getElementById('resumen-grupos');
+  wrap.innerHTML = '';
+  GRUPOS.forEach(g => {
+    const pred = predicciones[g.nombre] || {};
+    const div = document.createElement('div');
+    div.className = 'resumen-grupo';
+    let html = `<div class="resumen-grupo-titulo">${g.nombre}</div>`;
+    [1,2,3,4].forEach(pos => {
+      const eq = pred[pos] || '—';
+      html += `<div class="resumen-pos"><div class="pos-num pos-${pos}">${pos}</div><span>${eq}</span></div>`;
+    });
+    div.innerHTML = html;
+    wrap.appendChild(div);
+  });
+}
+
+async function enviarQuiniela() {
+  const est = document.getElementById('estado-envio');
+  const btn = document.getElementById('btn-enviar');
+  btn.disabled = true;
+  est.className = 'estado-envio enviando';
+  est.textContent = '⏳ Enviando tu quiniela...';
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ nombre, predicciones })
+    });
+    est.className = 'estado-envio ok';
+    est.textContent = '✅ ¡Quiniela enviada! Ya aparece en el Sheet del grupo.';
+    btn.textContent = '✅ Quiniela enviada';
+  } catch (err) {
+    est.className = 'estado-envio error';
+    est.textContent = '❌ Error de red. Comprueba tu conexión e inténtalo de nuevo.';
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('input-nombre').addEventListener('keydown', e => {
+  if (e.key === 'Enter') empezar();
+});
+</script>
 </body>
-
 </html>

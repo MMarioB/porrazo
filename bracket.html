@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bracket Eliminatorias — Porra Mundial 2026</title>
+    <style>
+        :root {
+            --verde: #1a6b3c;
+            --verde-mid: #145530;
+            --verde-claro: #e8f5ee;
+            --oro: #c9a02a;
+            --oro-claro: #fff8e1;
+            --gris-fondo: #f5f4f0;
+            --gris-borde: #ddd9d0;
+            --texto: #1a1a1a;
+            --texto-muted: #666;
+            --azul: #1a5fa8;
+            --rojo: #c0392b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--gris-fondo);
+            color: var(--texto);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--verde);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem 1.5rem;
+        }
+
+        header h1 {
+            font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        header p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            background: var(--verde-mid);
+            overflow-x: auto;
+        }
+
+        .step-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 0.75rem 1.2rem;
+            font-size: 0.82rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .step-btn.active {
+            color: white;
+            border-bottom-color: var(--oro);
+            font-weight: 600;
+        }
+
+        .step-btn:hover {
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 0.6rem;
+            background: #f0ede8;
+            border-bottom: 1px solid var(--gris-borde);
+            font-size: 0.82rem;
+        }
+
+        .nav-links a {
+            color: var(--verde);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 4rem;
+        }
+
+        #screen-inicio {
+            max-width: 480px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--gris-borde);
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        #screen-inicio .trophy {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        #screen-inicio h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        #screen-inicio p {
+            color: var(--texto-muted);
+            font-size: 0.88rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .puntuacion-info {
+            background: var(--verde-claro);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            font-size: 0.83rem;
+        }
+
+        .puntuacion-info h3 {
+            font-size: 0.85rem;
+            color: var(--verde-mid);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .pts-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #c8e6d4;
+        }
+
+        .pts-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            color: var(--verde-mid);
+        }
+
+        .pts-val {
+            font-weight: 700;
+            color: var(--verde);
+        }
+
+        .input-nombre {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--gris-borde);
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-nombre:focus {
+            border-color: var(--verde);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--verde);
+            color: white;
+            border: none;
+            padding: 0.85rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--verde-mid);
+        }
+
+        .btn-primary:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        #screen-bracket {
+            display: none;
+        }
+
+        .bracket-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .bracket-header h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .bracket-header p {
+            color: var(--texto-muted);
+            font-size: 0.85rem;
+        }
+
+        .progreso-bracket {
+            background: white;
+            border: 1px solid var(--gris-borde);
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--texto-muted);
+        }
+
+        .progreso-bar-wrap {
+            flex: 1;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+        }
+
+        .progreso-bar {
+            height: 100%;
+            background: var(--verde);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .aviso-fecha {
+            background: var(--oro-claro);
+            border: 1px solid #f0c040;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.83rem;
+            color: #5a4000;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .ronda-section {
+            margin-bottom: 2rem;
+        }
+
+        .ronda-titulo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .ronda-titulo h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--verde-mid);
+        }
+
+        .ronda-badge {
+            background: var(--verde);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 20px;
+        }
+
+        .ronda-bloqueada-msg {
+            font-size: 0.8rem;
+            color: var(--texto-muted);
+            font-style: italic;
+        }
+
+        .partidos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .final-wrap {
+            max-width: 380px;
+            margin: 0 auto;
+        }
+
+        .partido-card {
+            background: white;
+            border: 1.5px solid var(--gris-borde);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .partido-card.tiene-ganador {
+            border-color: var(--verde);
+        }
+
+        .partido-card.bloqueado {
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .partido-card.es-final {
+            border: 2px solid var(--oro);
+            border-radius: 14px;
+        }
+
+        .partido-num {
+            font-size: 0.7rem;
+            color: var(--texto-muted);
+            padding: 0.45rem 0.8rem 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .partido-card.es-final .partido-num {
+            color: var(--oro);
+            font-size: 0.75rem;
+        }
+
+        .equipo-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #f0ede8;
+            padding: 0.65rem 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.15s;
+            font-size: 0.88rem;
+            font-family: inherit;
+        }
+
+        .equipo-btn:last-of-type {
+            border-bottom: none;
+        }
+
+        .equipo-btn:hover:not(:disabled) {
+            background: var(--verde-claro);
+        }
+
+        .equipo-btn.ganador {
+            background: var(--verde-claro);
+            font-weight: 700;
+            color: var(--verde-mid);
+        }
+
+        .equipo-btn.perdedor {
+            opacity: 0.38;
+        }
+
+        .equipo-nombre {
+            flex: 1;
+        }
+
+        .check-ganador {
+            color: var(--verde);
+            font-size: 0.85rem;
+            opacity: 0;
+        }
+
+        .equipo-btn.ganador .check-ganador {
+            opacity: 1;
+        }
+
+        .campeon-display {
+            display: none;
+            max-width: 380px;
+            margin: 1.2rem auto 0;
+            background: var(--oro-claro);
+            border: 2px solid var(--oro);
+            border-radius: 14px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .campeon-display.visible {
+            display: block;
+        }
+
+        .campeon-display .trofeo {
+            font-size: 2.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .campeon-display h3 {
+            font-size: 0.8rem;
+            color: var(--oro);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .campeon-nombre {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #7a5900;
+        }
+
+        .acciones {
+            max-width: 500px;
+            margin: 2rem auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn-enviar {
+            background: var(--azul);
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-enviar:hover:not(:disabled) {
+            background: #144d8a;
+        }
+
+        .btn-enviar:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .btn-reset {
+            background: none;
+            color: var(--rojo);
+            border: 1.5px solid var(--rojo);
+            padding: 0.7rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-reset:hover {
+            background: #fdecea;
+        }
+
+        .estado-envio {
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+        }
+
+        .estado-envio.enviando {
+            display: block;
+            background: #e8f0fe;
+            color: var(--azul);
+        }
+
+        .estado-envio.ok {
+            display: block;
+            background: var(--verde-claro);
+            color: var(--verde-mid);
+        }
+
+        .estado-envio.error {
+            display: block;
+            background: #fdecea;
+            color: var(--rojo);
+        }
+
+        @media (max-width: 600px) {
+            .partidos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🏆 Bracket Eliminatorias</h1>
+        <p>Porra Mundial 2026 · Fase final</p>
+    </header>
+
+    <nav class="steps">
+        <button class="step-btn active" id="tab-inicio" onclick="irA('inicio')">1. Nombre</button>
+        <button class="step-btn" id="tab-bracket" onclick="irA('bracket')">2. Bracket</button>
+    </nav>
+
+    <div class="nav-links">
+        <a href="index.html">← Fase de grupos</a>
+        <span style="color:#bbb">|</span>
+        <span style="color:#888">Bracket eliminatorias</span>
+    </div>
+
+    <div class="container">
+
+        <div id="screen-inicio">
+            <div class="trophy">⚽</div>
+            <h2>Porra de eliminatorias</h2>
+            <p>Elige el ganador de cada partido desde dieciseisavos hasta la final. Las rondas se van desbloqueando
+                conforme avanza el torneo.</p>
+            <div class="puntuacion-info">
+                <h3>Puntuación por acierto</h3>
+                <div class="pts-row"><span>Dieciseisavos</span><span class="pts-val">2 pts</span></div>
+                <div class="pts-row"><span>Octavos</span><span class="pts-val">4 pts</span></div>
+                <div class="pts-row"><span>Cuartos</span><span class="pts-val">6 pts</span></div>
+                <div class="pts-row"><span>Semifinales</span><span class="pts-val">8 pts</span></div>
+                <div class="pts-row"><span>Final</span><span class="pts-val">10 pts</span></div>
+                <div class="pts-row"><span>🏆 Campeón</span><span class="pts-val">15 pts</span></div>
+            </div>
+            <input class="input-nombre" type="text" id="input-nombre" placeholder="Tu nombre..." maxlength="30"
+                oninput="validarNombre()">
+            <button class="btn-primary" id="btn-empezar" onclick="empezar()" disabled>Ver bracket →</button>
+        </div>
+
+        <div id="screen-bracket">
+            <div class="bracket-header">
+                <h2>Elige el ganador de cada partido</h2>
+                <p>Al elegir un ganador pasa automáticamente a la siguiente ronda</p>
+            </div>
+            <div class="aviso-fecha">
+                📅 Los equipos de dieciseisavos se conocen el <strong>26 de junio</strong>. La ronda empieza el
+                <strong>28 de junio</strong>.
+            </div>
+            <div class="progreso-bracket">
+                <span>Progreso:</span>
+                <div class="progreso-bar-wrap">
+                    <div class="progreso-bar" id="barra-progreso" style="width:0%"></div>
+                </div>
+                <span id="texto-progreso">0 / 31 partidos</span>
+            </div>
+            <div id="bracket-container"></div>
+            <div class="acciones">
+                <button class="btn-enviar" id="btn-enviar" onclick="enviarBracket()" disabled>📤 Enviar bracket al
+                    grupo</button>
+                <div class="estado-envio" id="estado-envio"></div>
+                <button class="btn-reset" onclick="resetBracket()">🔄 Empezar de cero</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw9ZqJa7-NgJBet9jr6ImyHZoBMxOnPxA4i6jvKQ-LCacts7wN7THjzKfRAhM9BAzJW/exec';
+
+        const RONDAS_DEF = [
+            {
+                id: 'dieciseisavos', nombre: 'Dieciseisavos de final', pts: 2, desbloqueada: true,
+                partidos: [
+                    { id: 'D01', label: 'Partido 1', e1: '2° Grupo A', e2: '2° Grupo B' },
+                    { id: 'D02', label: 'Partido 2', e1: '1° Grupo E', e2: '3° mejor (ABCDF)' },
+                    { id: 'D03', label: 'Partido 3', e1: '1° Grupo F', e2: '2° Grupo C' },
+                    { id: 'D04', label: 'Partido 4', e1: '1° Grupo I', e2: '3° mejor (CDFGH)' },
+                    { id: 'D05', label: 'Partido 5', e1: '2° Grupo E', e2: '2° Grupo I' },
+                    { id: 'D06', label: 'Partido 6', e1: '1° Grupo C', e2: '2° Grupo F' },
+                    { id: 'D07', label: 'Partido 7', e1: '1° Grupo A', e2: '3° mejor (CEFHI)' },
+                    { id: 'D08', label: 'Partido 8', e1: '1° Grupo L', e2: '3° mejor (EHIJK)' },
+                    { id: 'D09', label: 'Partido 9', e1: '2° Grupo K', e2: '2° Grupo L' },
+                    { id: 'D10', label: 'Partido 10', e1: '1° Grupo H', e2: '2° Grupo J' },
+                    { id: 'D11', label: 'Partido 11', e1: '1° Grupo D', e2: '3° mejor (BEFIJ)' },
+                    { id: 'D12', label: 'Partido 12', e1: '1° Grupo G', e2: '3° mejor (AEHIJ)' },
+                    { id: 'D13', label: 'Partido 13', e1: '1° Grupo J', e2: '2° Grupo H' },
+                    { id: 'D14', label: 'Partido 14', e1: '1° Grupo B', e2: '3° mejor (EFGIJ)' },
+                    { id: 'D15', label: 'Partido 15', e1: '1° Grupo K', e2: '2° Grupo G' },
+                    { id: 'D16', label: 'Partido 16', e1: '2° Grupo D', e2: '1° Grupo G' },
+                ]
+            },
+            {
+                id: 'octavos', nombre: 'Octavos de final', pts: 4, desbloqueada: false,
+                partidos: [
+                    { id: 'O01', label: 'Octavos 1', e1: 'Gan. D01', e2: 'Gan. D02' },
+                    { id: 'O02', label: 'Octavos 2', e1: 'Gan. D03', e2: 'Gan. D04' },
+                    { id: 'O03', label: 'Octavos 3', e1: 'Gan. D05', e2: 'Gan. D06' },
+                    { id: 'O04', label: 'Octavos 4', e1: 'Gan. D07', e2: 'Gan. D08' },
+                    { id: 'O05', label: 'Octavos 5', e1: 'Gan. D09', e2: 'Gan. D10' },
+                    { id: 'O06', label: 'Octavos 6', e1: 'Gan. D11', e2: 'Gan. D12' },
+                    { id: 'O07', label: 'Octavos 7', e1: 'Gan. D13', e2: 'Gan. D14' },
+                    { id: 'O08', label: 'Octavos 8', e1: 'Gan. D15', e2: 'Gan. D16' },
+                ]
+            },
+            {
+                id: 'cuartos', nombre: 'Cuartos de final', pts: 6, desbloqueada: false,
+                partidos: [
+                    { id: 'C01', label: 'Cuartos 1', e1: 'Gan. O01', e2: 'Gan. O02' },
+                    { id: 'C02', label: 'Cuartos 2', e1: 'Gan. O03', e2: 'Gan. O04' },
+                    { id: 'C03', label: 'Cuartos 3', e1: 'Gan. O05', e2: 'Gan. O06' },
+                    { id: 'C04', label: 'Cuartos 4', e1: 'Gan. O07', e2: 'Gan. O08' },
+                ]
+            },
+            {
+                id: 'semis', nombre: 'Semifinales', pts: 8, desbloqueada: false,
+                partidos: [
+                    { id: 'S01', label: 'Semifinal 1', e1: 'Gan. C01', e2: 'Gan. C02' },
+                    { id: 'S02', label: 'Semifinal 2', e1: 'Gan. C03', e2: 'Gan. C04' },
+                ]
+            },
+            {
+                id: 'final', nombre: 'Final', pts: 10, desbloqueada: false,
+                partidos: [
+                    { id: 'F01', label: 'FINAL — 19 julio', e1: 'Gan. S01', e2: 'Gan. S02' },
+                ]
+            }
+        ];
+
+        // Mapa de avance: ganador de X va al partido Y como slot 1 o 2
+        const AVANCE = {
+            D01: { sig: 'O01', slot: 1 }, D02: { sig: 'O01', slot: 2 },
+            D03: { sig: 'O02', slot: 1 }, D04: { sig: 'O02', slot: 2 },
+            D05: { sig: 'O03', slot: 1 }, D06: { sig: 'O03', slot: 2 },
+            D07: { sig: 'O04', slot: 1 }, D08: { sig: 'O04', slot: 2 },
+            D09: { sig: 'O05', slot: 1 }, D10: { sig: 'O05', slot: 2 },
+            D11: { sig: 'O06', slot: 1 }, D12: { sig: 'O06', slot: 2 },
+            D13: { sig: 'O07', slot: 1 }, D14: { sig: 'O07', slot: 2 },
+            D15: { sig: 'O08', slot: 1 }, D16: { sig: 'O08', slot: 2 },
+            O01: { sig: 'C01', slot: 1 }, O02: { sig: 'C01', slot: 2 },
+            O03: { sig: 'C02', slot: 1 }, O04: { sig: 'C02', slot: 2 },
+            O05: { sig: 'C03', slot: 1 }, O06: { sig: 'C03', slot: 2 },
+            O07: { sig: 'C04', slot: 1 }, O08: { sig: 'C04', slot: 2 },
+            C01: { sig: 'S01', slot: 1 }, C02: { sig: 'S01', slot: 2 },
+            C03: { sig: 'S02', slot: 1 }, C04: { sig: 'S02', slot: 2 },
+            S01: { sig: 'F01', slot: 1 }, S02: { sig: 'F01', slot: 2 },
+        };
+
+        let nombre = '';
+        let ganadores = {};
+        // Estado mutable de equipos (se actualiza al propagar ganadores)
+        let equipos = {};
+
+        function initEquipos() {
+            equipos = {};
+            RONDAS_DEF.forEach(r => r.partidos.forEach(p => {
+                equipos[p.id] = { e1: p.e1, e2: p.e2 };
+            }));
+        }
+
+        function irA(p) {
+            ['inicio', 'bracket'].forEach(s => {
+                document.getElementById('screen-' + s).style.display = 'none';
+                document.getElementById('tab-' + s).classList.remove('active');
+            });
+            document.getElementById('screen-' + p).style.display = 'block';
+            document.getElementById('tab-' + p).classList.add('active');
+            if (p === 'bracket') renderBracket();
+        }
+
+        function validarNombre() {
+            document.getElementById('btn-empezar').disabled = document.getElementById('input-nombre').value.trim().length < 2;
+        }
+
+        function empezar() {
+            nombre = document.getElementById('input-nombre').value.trim();
+            irA('bracket');
+        }
+
+        function renderBracket() {
+            const container = document.getElementById('bracket-container');
+            container.innerHTML = '';
+
+            RONDAS_DEF.forEach(ronda => {
+                const sec = document.createElement('div');
+                sec.className = 'ronda-section';
+
+                const tit = document.createElement('div');
+                tit.className = 'ronda-titulo';
+                tit.innerHTML = `<h3>${ronda.nombre}</h3><span class="ronda-badge">${ronda.pts} pts/acierto</span>`
+                    + (!ronda.desbloqueada ? '<span class="ronda-bloqueada-msg">🔒 Se desbloquea cuando el organizador abra esta ronda</span>' : '');
+                sec.appendChild(tit);
+
+                const esFinal = ronda.id === 'final';
+                const grid = document.createElement('div');
+                grid.className = esFinal ? 'final-wrap' : 'partidos-grid';
+
+                ronda.partidos.forEach(pDef => {
+                    const pid = pDef.id;
+                    const eq = equipos[pid] || { e1: pDef.e1, e2: pDef.e2 };
+                    const ganador = ganadores[pid] || null;
+
+                    const card = document.createElement('div');
+                    card.className = 'partido-card'
+                        + (ganador ? ' tiene-ganador' : '')
+                        + (!ronda.desbloqueada ? ' bloqueado' : '')
+                        + (esFinal ? ' es-final' : '');
+
+                    const num = document.createElement('div');
+                    num.className = 'partido-num';
+                    num.textContent = pDef.label;
+                    card.appendChild(num);
+
+                    [eq.e1, eq.e2].forEach(eq_nombre => {
+                        const btn = document.createElement('button');
+                        btn.className = 'equipo-btn'
+                            + (ganador === eq_nombre ? ' ganador' : '')
+                            + (ganador && ganador !== eq_nombre ? ' perdedor' : '');
+                        btn.innerHTML = `<span class="equipo-nombre">${eq_nombre}</span><span class="check-ganador">✓</span>`;
+                        btn.disabled = !ronda.desbloqueada;
+                        btn.onclick = () => elegir(pid, eq_nombre);
+                        card.appendChild(btn);
+                    });
+
+                    grid.appendChild(card);
+                });
+
+                sec.appendChild(grid);
+                container.appendChild(sec);
+            });
+
+            // Campeón
+            const campeon = ganadores['F01'];
+            const cd = document.createElement('div');
+            cd.className = 'campeon-display' + (campeon ? ' visible' : '');
+            cd.innerHTML = campeon
+                ? `<div class="trofeo">🏆</div><h3>Tu campeón del mundo</h3><div class="campeon-nombre">${campeon}</div>`
+                : '';
+            container.appendChild(cd);
+
+            actualizarProgreso();
+        }
+
+        function elegir(pid, equipo) {
+            ganadores[pid] = equipo;
+
+            // Propagar al siguiente partido
+            const av = AVANCE[pid];
+            if (av) {
+                const prevE1 = equipos[av.sig]?.e1;
+                const prevE2 = equipos[av.sig]?.e2;
+                if (!equipos[av.sig]) equipos[av.sig] = { e1: '', e2: '' };
+                if (av.slot === 1) equipos[av.sig].e1 = equipo;
+                else equipos[av.sig].e2 = equipo;
+
+                // Si había un ganador en el partido siguiente que ya no es un equipo válido, limpiarlo
+                const ganSig = ganadores[av.sig];
+                if (ganSig && ganSig !== equipos[av.sig].e1 && ganSig !== equipos[av.sig].e2) {
+                    delete ganadores[av.sig];
+                    limpiarCascada(av.sig);
+                }
+            }
+
+            renderBracket();
+        }
+
+        function limpiarCascada(pid) {
+            const av = AVANCE[pid];
+            if (!av) return;
+            delete ganadores[av.sig];
+            limpiarCascada(av.sig);
+        }
+
+        function actualizarProgreso() {
+            const total = 31;
+            const n = Object.keys(ganadores).length;
+            document.getElementById('barra-progreso').style.width = Math.round(n / total * 100) + '%';
+            document.getElementById('texto-progreso').textContent = n + ' / ' + total + ' partidos';
+            document.getElementById('btn-enviar').disabled = n < 16;
+        }
+
+        function resetBracket() {
+            if (!confirm('¿Empezar el bracket de cero?')) return;
+            ganadores = {};
+            initEquipos();
+            renderBracket();
+        }
+
+        async function enviarBracket() {
+            const est = document.getElementById('estado-envio');
+            const btn = document.getElementById('btn-enviar');
+            btn.disabled = true;
+            est.className = 'estado-envio enviando';
+            est.textContent = '⏳ Enviando tu bracket...';
+            try {
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ tipo: 'bracket', nombre, ganadores, campeon: ganadores['F01'] || null })
+                });
+                est.className = 'estado-envio ok';
+                est.textContent = '✅ ¡Bracket enviado! Ya aparece en el Sheet.';
+                btn.textContent = '✅ Bracket enviado';
+            } catch (err) {
+                est.className = 'estado-envio error';
+                est.textContent = '❌ Error de red. Inténtalo de nuevo.';
+                btn.disabled = false;
+            }
+        }
+
+        initEquipos();
+        document.getElementById('input-nombre').addEventListener('keydown', e => { if (e.key === 'Enter') empezar(); });
+    </script>
+</body>
+
+</html>
